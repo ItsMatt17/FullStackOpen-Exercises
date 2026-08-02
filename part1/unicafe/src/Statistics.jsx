@@ -6,7 +6,6 @@ const Statistics = ({ good, neutral, bad }) => {
     return (<p>No feedback given</p>)
   }
 
-
   return (
     <>
       <h2>Statistics</h2>
