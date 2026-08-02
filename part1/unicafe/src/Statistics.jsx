@@ -1,3 +1,4 @@
+import StatisticLine from './StatisticLine.jsx'
 
 const Statistics = ({ good, neutral, bad }) => {
   const total = () => good + neutral + bad
@@ -9,12 +10,12 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <>
       <h2>Statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>total: {total()}</p>
-      <p>average: {total() === 0 ? 0 : (good - bad) / total()}</p>
-      <p>positive: {(total() === 0 ? 0 : (good) / total()) * 100}%</p>
+      <StatisticLine text={"good"} value={good} />
+      <StatisticLine text={"neutral"} value={neutral} />
+      <StatisticLine text={"bad"} value={bad} />
+      <StatisticLine text={"total"} value={total()} />
+      <StatisticLine text={"average"} value={total() === 0 ? 0 : (good - bad) / total()} />
+      <StatisticLine text={"positive"} value={(total() === 0 ? 0 : (good) / total()) * 100} />
     </>
   )
 
