@@ -1,16 +1,18 @@
 import { useState } from 'react'
 
 const App = () => {
-  const [contacts, setContacts] = useState([{ name: 'Arto Hellas' }])
-  const [newContact, setNewContact] = useState('')
+  const [contacts, setContacts] = useState([{ name: 'Arto Hellas', number: '123-456-7890' }])
+  const [newContactName, setNewContactName] = useState('')
+  const [newContactNumber, setNewContactNumber] = useState('')
 
   const createContact = (e) => {
     e.preventDefault()
 
-    if (!contacts.every((contact) => contact.name !== newContact)) alert(`${newContact} is already in your phonebook!`)
+    if (!contacts.every((contact) => contact.name !== newContactName)) alert(`${newContactName} is already in your phonebook!`)
     else {
-      setContacts(contacts.concat({ name: newContact }))
-      setNewContact('')
+      setContacts(contacts.concat({ name: newContactName, number: newContactNumber }))
+      setNewContactName('')
+      setNewContactNumber('')
     }
   }
 
@@ -21,16 +23,17 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={createContact}>
         <div>
-          name: <input value={newContact} onChange={(e) => setNewContact(e.target.value)} />
+          name: <input value={newContactName} onChange={(e) => setNewContactName(e.target.value)} />
+          number: <input value={newContactNumber} onChange={(e) => setNewContactNumber(e.target.value)} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <li>
-        {contacts.map((c) => (<ul key={c.name}>{c.name}</ul>))}
-      </li>
+      <div>
+        {contacts.map((c) => (<p key={c.name}>{c.name}: {c.number}</p>))}
+      </div>
     </div>
   )
 }
