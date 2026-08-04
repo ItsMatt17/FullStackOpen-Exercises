@@ -24,6 +24,7 @@ function App() {
 
   }
 
+
   return (
 
     <div>
@@ -31,6 +32,10 @@ function App() {
       <p>{votes[selected]}</p>
       <button onClick={handleNext}>Next Anecdote</button>
       <button onClick={handleVote}>Vote</button>
+
+      <p>{anecdotes[votes.indexOf(Math.max(...votes))]}</p>
+      <p>has {Math.max(...votes)} votes</p>
+
     </div>
 
   )
