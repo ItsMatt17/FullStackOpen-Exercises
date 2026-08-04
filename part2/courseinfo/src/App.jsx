@@ -1,7 +1,7 @@
 import Course from "./Course.jsx"
 
 const App = () => {
-  const course = {
+  const courses = [{
     name: 'Half Stack application development',
     parts: [
       {
@@ -21,9 +21,33 @@ const App = () => {
         exercises: 11
       }
     ]
+  },
+  {
+    name: 'Node.js',
+    id: 2,
+    parts: [
+      {
+        name: 'Routing',
+        exercises: 3,
+        id: 1
+      },
+      {
+        name: 'Middlewares',
+        exercises: 7,
+        id: 2
+      }
+    ]
   }
+  ]
 
-  return (<Course course={course} />)
+  return (
+    <div>
+      {courses.map((c) => <Course name={c.name} course={c} />)}
+    </div>
+
+
+
+  )
 
 }
 
