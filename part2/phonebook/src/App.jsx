@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './Filter'
+import Contacts from "./Contacts.jsx"
+import ContactForm from "./ContactForm.jsx"
 
 const App = () => {
   const [contacts, setContacts] = useState([{ name: 'Arto Hellas', number: '123-456-7890' }])
@@ -21,32 +24,26 @@ const App = () => {
     return filter ? contacts.filter((c) => c.name.toLowerCase().includes(filter.toLowerCase())) : contacts
   }
 
+  const onFilterChange = (e) => setFilter(e.target.value)
 
   return (
 
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={(e) => e.preventDefault()}>
-        Filter:
-        <input onChange={(e) => setFilter(e.target.value)} />
-      </form>
-
+      <Filter onChange={onFilterChange} />
       <h2>add new </h2>
-      <form onSubmit={createContact}>
-        <div>
-          name: <input value={newContactName} onChange={(e) => setNewContactName(e.target.value)} />
-          number: <input value={newContactNumber} onChange={(e) => setNewContactNumber(e.target.value)} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <ContactForm
+        onSubmit={createContact}
+        newContactName={newContactName}
+        newContactNumber={newContactNumber}
+        onNameChange={(e) => setNewContactName(e.target.value)}
+        onNumberChange={(e) => setNewContactNumber(e.target.value)}
+      />
       <h2>Numbers</h2>
-      <div>
-        {getFilteredContacts().map((c) => (<p key={c.name}>{c.name}: {c.number}</p>))}
-      </div>
+      <Contacts contacts={[...getFilteredContacts()]} />
     </div>
   )
 }
 
 export default App
+
