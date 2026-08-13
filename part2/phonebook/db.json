@@ -7,13 +7,18 @@
     },
     {
       "name": "meow",
-      "number": "1234",
+      "number": "12",
       "id": "wy1dyw8dzWg"
     },
     {
       "name": "test",
       "number": "12312",
       "id": "_dapA9H6muM"
+    },
+    {
+      "name": "teste",
+      "number": "123121231",
+      "id": "1B9ZK7l82Fs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

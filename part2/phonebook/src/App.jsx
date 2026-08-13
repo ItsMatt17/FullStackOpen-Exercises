@@ -1,9 +1,9 @@
 import Filter from './Filter'
 import Contacts from "./Contacts.jsx"
 import ContactForm from "./ContactForm.jsx"
+
 import { useEffect, useState } from 'react'
 import contactService from './services/contactService.js'
-
 
 const App = () => {
   const [contacts, setContacts] = useState([])
@@ -21,15 +21,25 @@ const App = () => {
   const createContact = (e) => {
     e.preventDefault()
 
-    if (!contacts.every((contact) => contact.name !== newContactName)) {
-      alert(`${newContactName} is already in your phonebook!`)
+    const contact = contacts.find((contact) => contact.name === newContactName)
+    const exists = contact !== undefined
+
+    if (!exists) {
+      let newContact = { name: newContactName, number: newContactNumber }
+      contactService
+        .create(newContact)
+        .then((c) => setContacts(contacts.concat(c)))
       return
     }
 
-    let newContact = { name: newContactName, number: newContactNumber }
-    contactService
-      .create(newContact)
-      .then((c) => setContacts(contacts.concat(c)))
+    const update = confirm(`${contact.name} is already in your phonebook, do you want to update their number?`)
+    if (update) {
+      const updatedContact = { ...contact, number: newContactNumber }
+      contactService
+        .update(contact.id, updatedContact)
+        .then(setContacts(contacts.map((c) => c.id === contact.id ? updatedContact : c)))
+    }
+
   }
 
   const getFilteredContacts = () => {
