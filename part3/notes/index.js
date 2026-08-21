@@ -27,11 +27,6 @@ const persons = [
 ]
 
 
-
-app.get("/api/persons", (_, resp) => {
-  resp.json(persons)
-})
-
 app.get("/api/info", (_, resp) => {
   resp.send(
     `<div>
@@ -41,6 +36,21 @@ app.get("/api/info", (_, resp) => {
   )
 })
 
+app.get("/api/persons", (_, resp) => resp.json(persons))
+
+
+
+app.get("/api/persons/:id", (req, resp) => {
+  const id = req.params.id
+  const person = persons.find((p) => p.id === id)
+
+  if (person) return resp.json(person)
+
+  resp.status(404)
+  resp.json({ error: `Could not find user with id of ${id}` })
+  return
+
+})
 
 
 
