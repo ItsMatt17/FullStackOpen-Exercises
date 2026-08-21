@@ -1,7 +1,9 @@
 const express = require("express")
+const morgan = require("morgan")
+
 const app = express()
 app.use(express.json())
-
+app.use(morgan('tiny'))
 
 let persons = [
   {
@@ -87,6 +89,17 @@ app.post("/api/persons", (req, resp) => {
   resp.json(person)
 })
 
+const unknownEndpoint = (_, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const PORT = 3001
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+
+
+
 function generateId() {
   return new String(Math.floor(1000 * Math.random()))
 }
@@ -94,7 +107,3 @@ function generateId() {
 function isEmpty(obj) {
   return Object.keys(obj).length === 0
 }
-
-const PORT = 3001
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
-
