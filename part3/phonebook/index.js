@@ -59,17 +59,24 @@ app.delete("/api/persons/:id", (req, resp) => {
 app.post("/api/persons", (req, resp) => {
 
   const body = req.body
-  if ((isEmpty(body)) || (typeof body?.name !== "string") || (typeof body?.number !== "string")) {
-    console.log("in if statement.")
-    return resp.status(400).json({
-      error: "Invalid request body."
-    })
+
+  if ((isEmpty(body))
+    || (typeof body?.name !== "string")
+    || (typeof body?.number !== "string")
+  ) return resp.status(400).json({ error: "Invalid request body." })
+
+
+  const { name, number } = body
+
+  if (persons.some((p) => p.name.toLowerCase() === name.toLowerCase())) {
+    return resp.status(400)
+      .json({ error: `Phonebook already contains person named: ${name}` })
   }
 
   const person = {
-    "id": new String(Math.floor(1000 * Math.random())),
-    "name": body.name,
-    "number": body.number,
+    id: generateId(),
+    name,
+    number
   }
 
   if (persons.find((p) => p.id === person.id)) {
@@ -78,10 +85,11 @@ app.post("/api/persons", (req, resp) => {
 
   persons.push(person)
   resp.json(person)
-
 })
 
-
+function generateId() {
+  return new String(Math.floor(1000 * Math.random()))
+}
 
 function isEmpty(obj) {
   return Object.keys(obj).length === 0
