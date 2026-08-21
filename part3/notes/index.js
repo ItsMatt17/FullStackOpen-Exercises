@@ -3,7 +3,7 @@ const app = express()
 app.use(express.json())
 
 
-const persons = [
+let persons = [
   {
     "id": "1",
     "name": "Arto Hellas",
@@ -39,7 +39,6 @@ app.get("/api/info", (_, resp) => {
 app.get("/api/persons", (_, resp) => resp.json(persons))
 
 
-
 app.get("/api/persons/:id", (req, resp) => {
   const id = req.params.id
   const person = persons.find((p) => p.id === id)
@@ -48,12 +47,15 @@ app.get("/api/persons/:id", (req, resp) => {
 
   resp.status(404)
   resp.json({ error: `Could not find user with id of ${id}` })
-  return
-
 })
 
+app.delete("/api/persons/:id", (req, resp) => {
+  console.log("here")
+  id = req.params.id
+  persons = persons.filter((p) => p.id !== id)
 
-
+  resp.status(204).end()
+})
 
 const PORT = 3001
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
