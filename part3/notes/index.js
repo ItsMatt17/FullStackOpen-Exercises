@@ -28,9 +28,17 @@ const persons = [
 
 
 
-app.get("/api/persons", (req, resp) => {
-
+app.get("/api/persons", (_, resp) => {
   resp.json(persons)
+})
+
+app.get("/api/info", (_, resp) => {
+  resp.send(
+    `<div>
+      <p>Phonebook has info for ${persons.length} people</p>
+      <p>${new Date().toString()}</p>
+    </div>`
+  )
 })
 
 
