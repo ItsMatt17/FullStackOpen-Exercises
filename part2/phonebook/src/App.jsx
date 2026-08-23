@@ -54,6 +54,7 @@ const App = () => {
         createNotification(`Contact for ${c.name} was successfully updated!`, false, 5000)
         clearInput()
       })
+      .catch(() => createNotification(`Could not update contact for ${updatedContact.name}!`, true, 5000))
       .finally(clearInput)
   }
 
