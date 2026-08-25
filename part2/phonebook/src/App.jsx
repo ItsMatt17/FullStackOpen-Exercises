@@ -73,7 +73,11 @@ const App = () => {
     const contact = contacts.find(c => c.id === id)
     contactService
       .del(id)
-      .then(() => setContacts(contacts.filter((c) => c.id !== id)))
+      .then(() => {
+        const msg = `Deleted the contact for ${contact.name}`
+        createNotification(msg, false, 5000)
+        setContacts(contacts.filter((c) => c.id !== id))
+      })
       .catch((err) => {
         const msg = err?.response?.data?.error ?? `There was an error whilst trying to delete the contact for ${contact.name}!`
         createNotification(msg, true, 5000)
