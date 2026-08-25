@@ -15,14 +15,17 @@ const App = () => {
 
   const createNotification = (msg, isError, delay) => {
     setNotification({ msg, isError })
-    setTimeout(() => setNotification(null), delay)
+    // So I don't overwrite other notifs 
+    setTimeout(() => {
+      setNotification((notif) => notif?.msg === msg ? null : notif)
+    }, delay)
   }
 
   useEffect(() => {
     contactService
       .getAll()
       .then((c) => setContacts(c))
-      .catch(() => createNotification(`Could not fetch contacts from the database!`, true, 10000))
+      .catch()
   }, [])
 
 
@@ -36,9 +39,14 @@ const App = () => {
     let newContact = { name: newContactName, number: newContactNumber }
     contactService
       .create(newContact)
-      .then((c) => setContacts(contacts.concat(c)))
-      .then(createNotification(`Contact for ${newContact.name} was successfully created!`, false, 5000))
-      .catch(() => createNotification(`Could not create contact for ${newContact.name}!`, true, 5000))
+      .then((c) => {
+        setContacts(contacts.concat(c))
+        createNotification(`Contact for ${newContact.name} was successfully created!`, false, 5000)
+      })
+      .catch((err) => {
+        const msg = err?.response?.data?.error ?? `Could not create contact for ${newContact.name}!`
+        createNotification(msg, true, 5000)
+      })
       .finally(clearInput)
   }
 
@@ -54,16 +62,22 @@ const App = () => {
         createNotification(`Contact for ${c.name} was successfully updated!`, false, 5000)
         clearInput()
       })
-      .catch(() => createNotification(`Could not update contact for ${updatedContact.name}!`, true, 5000))
+      .catch((err) => {
+        const msg = err?.response?.data?.error ?? `Could not update contact for ${updatedContact.name}!`
+        createNotification(msg, true, 5000)
+      })
       .finally(clearInput)
   }
 
   const deleteContact = (id) => {
-    const contact = contacts.find(c => c.id = id)
+    const contact = contacts.find(c => c.id === id)
     contactService
       .del(id)
       .then(() => setContacts(contacts.filter((c) => c.id !== id)))
-      .catch(() => createNotification(`There was an error whilst trying to delete the contact for ${contact.name}!`, true, 5000))
+      .catch((err) => {
+        const msg = err?.response?.data?.error ?? `There was an error whilst trying to delete the contact for ${contact.name}!`
+        createNotification(msg, true, 5000)
+      })
       .finally(clearInput)
   }
 
