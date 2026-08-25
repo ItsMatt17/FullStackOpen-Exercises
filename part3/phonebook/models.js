@@ -7,7 +7,14 @@ mongoose.connect(process.env.MONGODB_URI, { family: 4 })
   .catch((err) => console.error(`Exception occurred attempting to conntect to MongoDB ${err}`))
 
 
-const personSchema = new mongoose.Schema({ name: String, number: String })
+const personSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: String
+})
 
 personSchema.set('toJSON', {
   transform: (_, obj) => {

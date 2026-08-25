@@ -54,13 +54,6 @@ app.delete('/api/persons/:id', (req, resp, next) => {
 
 app.post('/api/persons', (req, resp, next) => {
   const body = req.body
-
-  if ((isEmpty(body))
-    || (typeof body?.name !== 'string')
-    || (typeof body?.number !== 'string')
-  ) return resp.status(400).json({ error: 'Invalid request body.' })
-
-
   const { name, number } = body
 
   // TODO: Make sure comparison does not depend on capitalization
@@ -81,12 +74,6 @@ app.put('/api/persons/:id', (req, resp, next) => {
   const id = req.params.id
 
   const { name, number } = body
-  if ((!name && !number)
-    || (typeof name !== 'string' && name)
-    || (typeof number !== 'string' && number)
-  ) return resp.status(400).json({ error: 'bad request body.' })
-
-
   Person.findById(id).then((res) => {
 
     if (res === null) return resp.status(404).end()
@@ -120,6 +107,9 @@ function errorHandler(error, req, resp, next) {
 
   if (error.name === 'CastError') return resp.status(400)
     .json({ error: 'mismatch id type.' })
+
+  if (error.name === 'ValidationError') return resp.status(400)
+    .json({ error: error.message })
 
   next(error)
 }
